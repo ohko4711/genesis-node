@@ -1,12 +1,4 @@
 services:
-  # Removes the database of the go-ethereum execution client to ensure we start from a clean state.
-  # (geth has a `removedb` option, but it asks for a keyboard confirmation, so we use this instead)
-  geth-remove-db:
-    image: "alpine:3.19.0"
-    command: rm -rf /execution-data
-    volumes:
-      - ./execution-data:/execution-data
-
   # Sets up the genesis configuration for the go-ethereum client from a JSON file.
   geth-genesis:
     image: "ethereum/client-go:latest"
@@ -14,22 +6,58 @@ services:
     volumes:
       - ./execution-data:/execution-data
       - ./el-cl-genesis-data:/el-cl-genesis-data
+
+  # Runs the go-ethereum execution client with the specified, unlocked account and necessary
+  # APIs to allow for proof-of-stake consensus via Prysm.
+  geth:
+    image: "ethereum/client-go:latest"
+    command:
+      - --state.scheme=path
+      - --verbosity=4
+      - --http
+      - --http.api=eth,net,web3
+      - --http.addr=0.0.0.0
+      - --http.corsdomain=*
+      - --ws
+      - --ws.api=eth,net,web3
+      - --ws.addr=0.0.0.0
+      - --ws.origins=*
+      - --authrpc.vhosts=*
+      - --authrpc.addr=0.0.0.0
+      - --authrpc.jwtsecret=/el-cl-genesis-data/jwt/jwtsecret
+      - --datadir=/execution-data
+      - --allow-insecure-unlock
+      - --port=30303
+      - --discovery.port=30303
+      - --syncmode=full
+    ports:
+      - 8551:8551
+      - 8545:8545
+      - 8546:8546
+      - 30303:30303
     depends_on:
-      geth-remove-db:
+      geth-genesis:
         condition: service_completed_successfully
+      beacon-chain:
+        condition: service_started
+    volumes:
+      - ./execution-data:/execution-data
+      - ./el-cl-genesis-data:/el-cl-genesis-data
 
   # Runs a Prysm beacon chain from a specified genesis state created in the previous step
   # and connects to go-ethereum in the same network as the execution client.
   # The account used in go-ethereum is set as the suggested fee recipient for transactions
   # proposed via the validators attached to the beacon node.
   beacon-chain:
-    image: "gcr.io/prysmaticlabs/prysm/beacon-chain:v4.1.1"
+    image: "gcr.io/prysmaticlabs/prysm/beacon-chain:v5.0.0"
     command:
+      - --accept-terms-of-use
       - --datadir=/consensus-data
       # No peers to sync with in this testnet, so setting to 0
       - --min-sync-peers=0
       - --chain-config-file=/el-cl-genesis-data/custom_config_data/config.yaml
       - --genesis-state=/el-cl-genesis-data/custom_config_data/genesis.ssz
+      - --execution-endpoint=http://geth:8551
       - --bootstrap-node=
       - --interop-eth1data-votes
       # We specify the chain id used by our execution client
@@ -37,9 +65,8 @@ services:
       - --chain-id=${CHAIN_ID:-32382}
       - --rpc-host=0.0.0.0
       - --grpc-gateway-host=0.0.0.0
-      - --execution-endpoint=http://geth:8551
-      - --accept-terms-of-use
-      - --jwt-secret=/execution/jwtsecret
+
+      - --jwt-secret=/el-cl-genesis-data/jwt/jwtsecret
       - --suggested-fee-recipient=0x123463a4b065722e99115d6c222f267d9cabb524
       - --minimum-peers-per-subnet=0
       - --enable-debug-rpc-endpoints
@@ -54,44 +81,12 @@ services:
       - ./consensus-data:/consensus-data 
       - ./el-cl-genesis-data:/el-cl-genesis-data
 
-  # Runs the go-ethereum execution client with the specified, unlocked account and necessary
-  # APIs to allow for proof-of-stake consensus via Prysm.
-  geth:
-    image: "ethereum/client-go:latest"
-    command:
-      - --http
-      - --http.api=eth,net,web3
-      - --http.addr=0.0.0.0
-      - --http.corsdomain=*
-      - --ws
-      - --ws.api=eth,net,web3
-      - --ws.addr=0.0.0.0
-      - --ws.origins=*
-      - --authrpc.vhosts=*
-      - --authrpc.addr=0.0.0.0
-      - --authrpc.jwtsecret=/el-cl-genesis-data/jwt/jwtsecret
-      - --datadir=/execution-data
-      - --allow-insecure-unlock
-      - --unlock=0x123463a4b065722e99115d6c222f267d9cabb524
-      - --nodiscover
-      - --syncmode=full
-    ports:
-      - 8551:8551
-      - 8545:8545
-      - 8546:8546
-    depends_on:
-      geth-genesis:
-        condition: service_completed_successfully
-      beacon-chain:
-        condition: service_started
-    volumes:
-      - ./execution-data:/execution-data
-      - ./el-cl-genesis-data:/el-cl-genesis-data
+
 
   # We run a validator client with 64, deterministically-generated keys that match
   # The validator keys present in the beacon chain genesis state generated a few steps above.
   validator:
-    image: "gcr.io/prysmaticlabs/prysm/validator:v4.1.1"
+    image: "gcr.io/prysmaticlabs/prysm/validator:v5.0.0"
     command:
       - --beacon-rpc-provider=beacon-chain:4000
       - --datadir=/consensus-data
@@ -99,7 +94,6 @@ services:
       - --interop-num-validators=64
       - --interop-start-index=0
       - --chain-config-file=/el-cl-genesis-data/custom_config_data/config.yaml
-      - --force-clear-db
     depends_on:
       beacon-chain:
         condition: service_started
