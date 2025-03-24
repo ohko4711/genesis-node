@@ -2,10 +2,10 @@ services:
   # Sets up the genesis configuration for the go-ethereum client from a JSON file.
   geth-genesis:
     image: "ethereum/client-go:latest"
-    command: --datadir=/execution-data init  /el-cl-genesis-data/custom_config_data/genesis.json
+    command: --datadir=/execution-data init  /el-cl-genesis-data/metadata/genesis.json
     volumes:
       - ./execution-data:/execution-data
-      - ./el-cl-genesis-data:/el-cl-genesis-data
+      - ../el-cl-genesis-data:/el-cl-genesis-data
 
   # Runs the go-ethereum execution client with the specified, unlocked account and necessary
   # APIs to allow for proof-of-stake consensus via Prysm.
@@ -13,7 +13,7 @@ services:
     image: "ethereum/client-go:latest"
     command:
       - --state.scheme=path
-      - --verbosity=4
+      - --verbosity=3
       - --http
       - --http.api=eth,net,web3
       - --http.addr=0.0.0.0
@@ -42,7 +42,7 @@ services:
         condition: service_started
     volumes:
       - ./execution-data:/execution-data
-      - ./el-cl-genesis-data:/el-cl-genesis-data
+      - ../el-cl-genesis-data:/el-cl-genesis-data
 
   # Runs a Prysm beacon chain from a specified genesis state created in the previous step
   # and connects to go-ethereum in the same network as the execution client.
@@ -55,8 +55,8 @@ services:
       - --datadir=/consensus-data
       # No peers to sync with in this testnet, so setting to 0
       - --min-sync-peers=0
-      - --chain-config-file=/el-cl-genesis-data/custom_config_data/config.yaml
-      - --genesis-state=/el-cl-genesis-data/custom_config_data/genesis.ssz
+      - --chain-config-file=/el-cl-genesis-data/metadata/config.yaml
+      - --genesis-state=/el-cl-genesis-data/metadata/genesis.ssz
       - --execution-endpoint=http://geth:8551
       - --bootstrap-node=
       - --interop-eth1data-votes
@@ -79,7 +79,7 @@ services:
       - 9090:9090
     volumes:
       - ./consensus-data:/consensus-data 
-      - ./el-cl-genesis-data:/el-cl-genesis-data
+      - ../el-cl-genesis-data:/el-cl-genesis-data
 
 
 
@@ -93,12 +93,12 @@ services:
       - --accept-terms-of-use
       - --interop-num-validators=64
       - --interop-start-index=0
-      - --chain-config-file=/el-cl-genesis-data/custom_config_data/config.yaml
+      - --chain-config-file=/el-cl-genesis-data/metadata/config.yaml
     depends_on:
       beacon-chain:
         condition: service_started
     volumes:
-      - ./el-cl-genesis-data:/el-cl-genesis-data
+      - ../el-cl-genesis-data:/el-cl-genesis-data
       - ./consensus-data:/consensus-data
 
   dora-explorer:
@@ -106,8 +106,8 @@ services:
     container_name: "dora-explorer"
     command: -config=/config/config.yaml
     volumes:
-      - ./dora:/config
-      - ./consensus:/consensus
+      - ../dora:/config
+      - ../el-cl-genesis-data:/el-cl-genesis-data
       # - ./validator-ranges:/validator-ranges
     ports:
       - "9777:8080"
