@@ -1,7 +1,7 @@
 services:
   geth-genesis:
     image: "ethereum/client-go:v1.14.0"
-    command: --datadir=/execution-data init  /el-cl-genesis-data/custom_config_data/genesis.json
+    command: --datadir=/execution-data  --state.scheme=hash  init  /el-cl-genesis-data/custom_config_data/genesis.json
     volumes:
       - ./execution-data:/execution-data
       - ../el-cl-genesis-data:/el-cl-genesis-data
@@ -10,7 +10,7 @@ services:
     image: ethereum/client-go:v1.14.0
     command:
       - --networkid=6480
-      - --state.scheme=path
+      - --state.scheme=hash
       - --verbosity=3
       - --datadir=/execution-data
       - --http
@@ -80,6 +80,7 @@ services:
       - --import-all-attestations
       - --genesis-backfill
       - --reconstruct-historic-states
+      - --allow-insecure-genesis-sync
     volumes:
       - ./consensus-data:/consensus-data
       - ../el-cl-genesis-data:/el-cl-genesis-data
