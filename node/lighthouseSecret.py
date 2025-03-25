@@ -8,8 +8,9 @@ def read_json_file(file_path):
         return json.load(file)
 
 def create_secrets_directory(file_path):
-    base_name = os.path.splitext(os.path.basename(file_path))[0]
-    secrets_dir = os.path.join(os.path.dirname(file_path), f'{base_name}_secrets')
+    # Get parent directory of the current directory
+    parent_dir = os.path.dirname(os.path.dirname(file_path))
+    secrets_dir = os.path.join(parent_dir, 'validator_keys_secrets')
     if not os.path.exists(secrets_dir):
         os.makedirs(secrets_dir)
     return secrets_dir
