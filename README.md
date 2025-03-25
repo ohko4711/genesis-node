@@ -15,6 +15,11 @@
 
 ```
 
+## 流程
+- 生成genesis files
+-  `./node/deposit` 生成validator keys
+
+
 ### ethereum-genesis-generator
 
 - docker 默认读取配置values.env; 需要指定不同链配置时,使用指定配置覆盖values.env
@@ -27,3 +32,5 @@
 
 
 `Cannot determine validator ETH1 deposit block number`
+
+

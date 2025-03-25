@@ -59,12 +59,17 @@ services:
       - --genesis-state=/el-cl-genesis-data/metadata/genesis.ssz
       - --execution-endpoint=http://geth:8551
       - --bootstrap-node=
-      - --interop-eth1data-votes
       # We specify the chain id used by our execution client
       - --contract-deployment-block=0
       - --chain-id=${CHAIN_ID:-32382}
       - --rpc-host=0.0.0.0
+      - --rpc-port=3500
       - --grpc-gateway-host=0.0.0.0
+      - --grpc-gateway-corsdomain=*
+      - --grpc-gateway-port=4000
+      - --p2p-host-ip=${IP_ADDRESS}
+      - --p2p-tcp-port=13000
+      - --p2p-udp-port=12000
 
       - --jwt-secret=/el-cl-genesis-data/jwt/jwtsecret
       - --suggested-fee-recipient=0x123463a4b065722e99115d6c222f267d9cabb524
@@ -88,18 +93,21 @@ services:
   validator:
     image: "gcr.io/prysmaticlabs/prysm/validator:v5.0.0"
     command:
-      - --beacon-rpc-provider=beacon-chain:4000
+      - --beacon-rpc-gateway-provider=beacon-chain:4000
+      - --beacon-rpc-provider=beacon-chain:3500
       - --datadir=/consensus-data
       - --accept-terms-of-use
-      - --interop-num-validators=64
-      - --interop-start-index=0
       - --chain-config-file=/el-cl-genesis-data/metadata/config.yaml
+      - --wallet-dir=/validator_keys
+      - --wallet-password-file=/password.txt
     depends_on:
       beacon-chain:
         condition: service_started
     volumes:
       - ../el-cl-genesis-data:/el-cl-genesis-data
       - ./consensus-data:/consensus-data
+      - ./password.txt:/password.txt
+      - ./validator_keys:/validator_keys
 
   dora-explorer:
     image: "pk910/dora-the-explorer:latest"
