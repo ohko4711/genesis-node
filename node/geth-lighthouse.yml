@@ -9,7 +9,7 @@ services:
   execution:
     image: ethereum/client-go:v1.14.0
     command:
-      - --networkid=6480
+      - --networkid=23333
       - --state.scheme=hash
       - --verbosity=3
       - --datadir=/execution-data
@@ -122,4 +122,19 @@ services:
       - "5064:5064"
     depends_on:
       - beacon
+    restart: unless-stopped
+
+  dora-explorer:
+    image: "pk910/dora-the-explorer:latest"
+    container_name: "dora-explorer"
+    command: -config=/config/config.yaml
+    volumes:
+      - ../dora:/config
+      - ../el-cl-genesis-data:/el-cl-genesis-data
+      # - ./validator-ranges:/validator-ranges
+    ports:
+      - "9777:8080"
+    depends_on:
+      beacon:
+        condition: service_started
     restart: unless-stopped

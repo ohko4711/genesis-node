@@ -7,3 +7,5 @@ deposit
 validator_keys
 validator_keys_secrets
 password.txt
+
+.venv

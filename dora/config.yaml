@@ -4,7 +4,7 @@ logging:
 # Chain network configuration
 chain:
   name: "endurance-devnet"
-  configPath: "/el-cl-genesis-data/metadata/config.yaml"
+  configPath: "/el-cl-genesis-data/custom_config_data/config.yaml"
   displayName: "Endurance Devnet"
 
 # HTTP Server configuration
@@ -30,8 +30,8 @@ frontend:
 beaconapi:
   # CL Client RPC
   endpoints:
-    - url: "http://localhost:4000"
-      name: "geth-prysm"
+    - url: "http://localhost:5052"
+      name: "geth-lighthouse"
       archive: false
 
   # local cache for page models
