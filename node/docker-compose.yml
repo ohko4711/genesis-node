@@ -61,7 +61,7 @@ services:
       - --bootstrap-node=
       # We specify the chain id used by our execution client
       - --contract-deployment-block=0
-      - --chain-id=${CHAIN_ID:-32382}
+      - --chain-id=245333333
       - --rpc-host=0.0.0.0
       - --rpc-port=3500
       - --grpc-gateway-host=0.0.0.0

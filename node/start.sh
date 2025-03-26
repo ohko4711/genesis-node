@@ -1,4 +1,4 @@
-./clean.sh
+
 export IP_ADDRESS=$(curl -4 https://icanhazip.com/)
 
 if [ -z "$IP_ADDRESS" ]; then
