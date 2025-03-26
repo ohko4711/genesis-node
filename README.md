@@ -25,6 +25,17 @@
 - docker 默认读取配置values.env; 需要指定不同链配置时,使用指定配置覆盖values.env
 
 
+### generate validator keys 
+
+```
+cd node/ethstaker-deposit-cli 
+
+install env ref:https://deposit-cli.ethstaker.cc/other_install_options.html#option-2-build-deposit-cli-with-virtualenv
+
+python3 -m ethstaker_deposit existing-mnemonic  --num_validators=64 --validator_start_index=0 --withdrawal_address "0x55A4255DcD8e41B588Fb54E11Afc8A34D791ab1d" --mnemonic "sleep moment list remain like wall lake industry canvas wonder ecology elite duck salad naive syrup frame brass utility club odor country obey pudding" --mnemonic_language=english  --folder=.. --keystore_password=0123456789.eth --regular-withdrawal --chain custom
+```
+
+
 ## debug
 
 - `Exception: Missing environment variable: EL_PREMINE_ADDRS`

@@ -8,4 +8,4 @@ fi
 
 echo "Using IP address: $IP_ADDRESS"
 
-docker compose -f geth-lighthouse.yml up -d
+docker compose -f docker-compose.yml up -d
