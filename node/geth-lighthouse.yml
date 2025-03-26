@@ -1,15 +1,15 @@
 services:
   geth-genesis:
-    image: "ethereum/client-go:v1.14.0"
-    command: --datadir=/execution-data  --state.scheme=hash  init  /el-cl-genesis-data/custom_config_data/genesis.json
+    image: ethereum/client-go:v1.15.6
+    command: --datadir=/execution-data  --state.scheme=hash  init  /el-cl-genesis-data/metadata/genesis.json
     volumes:
       - ./execution-data:/execution-data
       - ../el-cl-genesis-data:/el-cl-genesis-data
 
   execution:
-    image: ethereum/client-go:v1.14.0
+    image: ethereum/client-go:v1.15.6
     command:
-      - --networkid=23333
+      - --networkid=245333333
       - --state.scheme=hash
       - --verbosity=3
       - --datadir=/execution-data
@@ -52,13 +52,13 @@ services:
         condition: service_completed_successfully
 
   beacon:
-    image: sigp/lighthouse:v5.1.3
+    image: sigp/lighthouse:v6.0.0
     command:
       - lighthouse
       - beacon_node
       - --debug-level=info
       - --datadir=/consensus-data
-      - --testnet-dir=/el-cl-genesis-data/custom_config_data
+      - --testnet-dir=/el-cl-genesis-data/metadata
       - --enr-address=${IP_ADDRESS}
       - --enr-udp-port=9000
       - --enr-tcp-port=9000
@@ -68,7 +68,7 @@ services:
       - --http
       - --http-address=0.0.0.0
       - --http-port=5052
-      - --http-allow-sync-stalled
+      - --http-allow-origin=*
       - --execution-endpoints=http://execution:8551
       - --jwt-secrets=/el-cl-genesis-data/jwt/jwtsecret
       - --suggested-fee-recipient=0x8fBAE29f7BEbF106eB5f5C0E3f9F60d870DD6b41
@@ -81,6 +81,7 @@ services:
       - --genesis-backfill
       - --reconstruct-historic-states
       - --allow-insecure-genesis-sync
+      - --target-peers=0
     volumes:
       - ./consensus-data:/consensus-data
       - ../el-cl-genesis-data:/el-cl-genesis-data
@@ -95,12 +96,12 @@ services:
     restart: unless-stopped
 
   validator:
-    image: sigp/lighthouse:v5.1.3
+    image: sigp/lighthouse:v6.0.0
     command:
       - lighthouse
       - validator_client
       - --debug-level=info
-      - --testnet-dir=/el-cl-genesis-data/custom_config_data
+      - --testnet-dir=/el-cl-genesis-data/metadata
       - --validators-dir=/validator_keys
       - --secrets-dir=/validator_keys_secrets
       - --http
