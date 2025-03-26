@@ -1,0 +1,1 @@
+docker restart dora-explorer

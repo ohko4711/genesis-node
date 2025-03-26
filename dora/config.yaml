@@ -30,9 +30,9 @@ frontend:
 beaconapi:
   # CL Client RPC
   endpoints:
-    - url: "http://localhost:5052"
+    - url: "http://127.0.0.1:4000"
       name: "geth-lighthouse"
-      archive: false
+      archive: true
 
   # local cache for page models
   localCacheSize: 10 # 10MB
