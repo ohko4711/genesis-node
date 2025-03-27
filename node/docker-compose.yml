@@ -15,11 +15,13 @@ services:
       - --state.scheme=path
       - --verbosity=3
       - --http
-      - --http.api=eth,net,web3
+      - --http.api=eth,net,web3,admin,debug
+      - --http.port=8545
+      - --http.vhosts=*
       - --http.addr=0.0.0.0
       - --http.corsdomain=*
       - --ws
-      - --ws.api=eth,net,web3
+      - --ws.api=eth,net,web3,admin,debug
       - --ws.addr=0.0.0.0
       - --ws.origins=*
       - --authrpc.vhosts=*
@@ -51,7 +53,7 @@ services:
   # The account used in go-ethereum is set as the suggested fee recipient for transactions
   # proposed via the validators attached to the beacon node.
   beacon-chain:
-    image: "gcr.io/prysmaticlabs/prysm/beacon-chain:v5.0.0"
+    image: "gcr.io/prysmaticlabs/prysm/beacon-chain:v5.3.2"
     command:
       - --accept-terms-of-use
       - --datadir=/consensus-data
@@ -93,13 +95,17 @@ services:
   # We run a validator client with 64, deterministically-generated keys that match
   # The validator keys present in the beacon chain genesis state generated a few steps above.
   validator:
-    image: "gcr.io/prysmaticlabs/prysm/validator:v5.0.0"
+    image: "gcr.io/prysmaticlabs/prysm/validator:v5.3.2"
     command:
       - --beacon-rpc-gateway-provider=beacon-chain:4000
       - --beacon-rpc-provider=beacon-chain:3500
       - --datadir=/consensus-data
       - --accept-terms-of-use
       - --chain-config-file=/el-cl-genesis-data/metadata/config.yaml
+      # option1. specify the interop mode.
+      # - --interop-num-validators=64
+      # - --interop-start-index=0
+      # option2. specify the wallet dir and password file.
       - --wallet-dir=/validator_keys
       - --wallet-password-file=/password.txt
     depends_on:
