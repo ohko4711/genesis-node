@@ -23,6 +23,7 @@ frontend:
 
   # link to EL Explorer
   ethExplorerLink: ""
+  rainbowkitProjectId: "7ef7824583418b0e3914c981bd833ace"
 
   # file or inventory url to load validator names from
   # validatorNamesYaml: "/validator-ranges/validator_names.yaml"
