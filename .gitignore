@@ -9,3 +9,4 @@ validator_keys_secrets
 password.txt
 
 .venv
+.env
