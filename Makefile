@@ -3,4 +3,4 @@ make all:
 	cd ethereum-genesis-generator && rm -rf ../el-cl-genesis-data && ./start.sh 
 
 	# 2. 启动节点
-	cd node && ./clean.sh && ./start.sh 
+	cd node && ./down.sh && ./clean.sh && ./start.sh 
