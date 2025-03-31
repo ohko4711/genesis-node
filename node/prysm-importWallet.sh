@@ -4,7 +4,7 @@ docker run \
   --user=root \
   -v $(pwd)/validator_keys:/validator_keys \
   -v $(pwd)/password.txt:/password.txt \
-  gcr.io/prysmaticlabs/prysm/validator:v5.0.0 \
+  gcr.io/prysmaticlabs/prysm/validator:v5.3.2 \
   wallet create \
   --wallet-dir=/validator_keys \
   --wallet-password-file=/password.txt \
@@ -15,7 +15,7 @@ docker run \
   --user=root \
   -v $(pwd)/validator_keys:/validator_keys \
   -v $(pwd)/password.txt:/password.txt \
-  gcr.io/prysmaticlabs/prysm/validator:v5.0.0 \
+  gcr.io/prysmaticlabs/prysm/validator:v5.3.2 \
   accounts import \
   --wallet-dir=/validator_keys \
   --wallet-password-file=/password.txt \
