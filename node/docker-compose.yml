@@ -12,7 +12,6 @@ services:
   geth:
     image: "ethereum/client-go:latest"
     command:
-      - --state.scheme=path
       - --verbosity=3
       - --http
       - --http.api=eth,net,web3,admin,debug
@@ -32,6 +31,7 @@ services:
       - --port=30303
       - --discovery.port=30303
       - --syncmode=full
+      - --gcmode=archive
       - --bootnodes=enr:-Iq4QJk4WqRkjsX5c2CXtOra6HnxN-BMXnWhmhEQO9Bn9iABTJGdjUOurM7Btj1ouKaFkvTRoju5vz2GPmVON2dffQKGAX53x8JigmlkgnY0gmlwhLKAlv6Jc2VjcDI1NmsxoQK6S-Cii_KmfFdUJL2TANL3ksaKUnNXvTCv1tLwXs0QgIN1ZHCCIyk
 
     ports:
