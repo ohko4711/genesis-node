@@ -80,6 +80,7 @@ services:
       - --minimum-peers-per-subnet=0
       - --enable-debug-rpc-endpoints
       - --force-clear-db
+      - --slots-per-archive-point=32  # archival node:https://docs.prylabs.network/docs/advanced/beacon_node_api
     ports:
       - 4000:4000
       - 3500:3500
