@@ -58,3 +58,12 @@ cd node
 curl -X GET http://localhost:4000/eth/v1/beacon/states/head/validators/0xaa4545eae1ffe47cb4e48d1aa640e7994acdc9c976581c4a1bbf4ec34cbf2cad516e58e31e104a6bc26659cb6617674f
 
 ```
+
+**查询所有validator keys**
+
+用于测试批量退出时,获取大范围pubkeys
+
+```
+curl -s "http://localhost:4000/eth/v1/beacon/states/head/validators?status=active" \     
+  -H "accept: application/json" | jq '.data[].validator.pubkey'
+```
