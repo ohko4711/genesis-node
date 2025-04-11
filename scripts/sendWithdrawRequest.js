@@ -6,11 +6,14 @@ const wallet = new ethers.Wallet(process.env.PRIVATE_KEY, provider);
 
 async function sendWithdrawRequest() {
 
+    const pubkey = "0x87f5116e565cc9caa8a4a23a32b2bc211cf9d55ad58a4a7a92f570e71137dca300a663bcdedcdf82c11c81abfc611536";
+    const amount = "0000000000000000"; // 0 means exit the validator
+
     const tx = await wallet.sendTransaction({
         // Withdraw contract address
         to: process.env.WITHDRAW_CONTRACT_ADDRESS,
         // 0x{pubkey}{amount}
-        data: "0xb183ffd1e01fb382d78a6757e726ce3d7d4726bb71175718e7badf717e0b78b1c2b4e0e51bb2bb5069a5027074263f6800000002540be400",
+        data: `${pubkey}${amount}`,
         gasLimit: 2100000,
         value: ethers.utils.parseEther("0.01")
     });
