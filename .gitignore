@@ -12,3 +12,4 @@ password.txt
 .env
 
 node_modules
+deposit-data*
