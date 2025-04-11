@@ -50,3 +50,11 @@ cd node
 `Cannot determine validator ETH1 deposit block number`
 
 
+**查询validator**
+
+用于检查0x1 upgrade to 0x2 何时生效
+
+```
+curl -X GET http://localhost:4000/eth/v1/beacon/states/head/validators/0xaa4545eae1ffe47cb4e48d1aa640e7994acdc9c976581c4a1bbf4ec34cbf2cad516e58e31e104a6bc26659cb6617674f
+
+```
