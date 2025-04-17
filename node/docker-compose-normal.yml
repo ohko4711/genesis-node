@@ -1,0 +1,137 @@
+# 普通节点的启动配置,主要区别在于需要指定genesis-node's bootinfo 
+services:
+  # Sets up the genesis configuration for the go-ethereum client from a JSON file.
+  geth-genesis:
+    image: "ethereum/client-go:latest"
+    command: -state.scheme=hash --datadir=/execution-data init  /el-cl-genesis-data/metadata/genesis.json
+    volumes:
+      - ./execution-data:/execution-data
+      - ../el-cl-genesis-data:/el-cl-genesis-data
+
+  # Runs the go-ethereum execution client with the specified, unlocked account and necessary
+  # APIs to allow for proof-of-stake consensus via Prysm.
+  geth:
+    image: "ethereum/client-go:latest"
+    command:
+      - --state.scheme=hash
+      - --verbosity=3
+      - --http
+      - --http.api=eth,net,web3,admin,debug
+      - --http.port=8545
+      - --http.vhosts=*
+      - --http.addr=0.0.0.0
+      - --http.corsdomain=*
+      - --ws
+      - --ws.api=eth,net,web3,admin,debug
+      - --ws.addr=0.0.0.0
+      - --ws.origins=*
+      - --authrpc.vhosts=*
+      - --authrpc.addr=0.0.0.0
+      - --authrpc.jwtsecret=/el-cl-genesis-data/jwt/jwtsecret
+      - --datadir=/execution-data
+      - --allow-insecure-unlock
+      - --port=30303
+      - --discovery.port=30303
+      - --syncmode=full
+      - --gcmode=archive
+      # TODO: change me: get from genesis-node's enr  
+      - --bootnodes=enr:-Mq4QJftjSIm8l6C5CpbTjhpWmH4qHyQh4mVNVjfa7EbDQTeZPSq9UYIkKcXe_TkeOgrYSSjFUCxhqNFXkkhU5EH9ySGAZZDpDUrh2F0dG5ldHOIAAAAAAAGAACEZXRoMpBbbO2wYAAAACAAAAAAAAAAgmlkgnY0gmlwhJ_fRY2EcXVpY4IyyIlzZWNwMjU2azGhA6hwftzefFdjZCtm5Ii44WEjIZwIBpSqAu17i6dJJI9ZiHN5bmNuZXRzD4N0Y3CCMsiDdWRwgi7g
+    ports:
+      - 8551:8551
+      - 8545:8545
+      - 8546:8546
+      - 30303:30303
+    depends_on:
+      geth-genesis:
+        condition: service_completed_successfully
+      beacon-chain:
+        condition: service_started
+    volumes:
+      - ./execution-data:/execution-data
+      - ../el-cl-genesis-data:/el-cl-genesis-data
+
+  # Runs a Prysm beacon chain from a specified genesis state created in the previous step
+  # and connects to go-ethereum in the same network as the execution client.
+  # The account used in go-ethereum is set as the suggested fee recipient for transactions
+  # proposed via the validators attached to the beacon node.
+  beacon-chain:
+    image: "gcr.io/prysmaticlabs/prysm/beacon-chain:v5.3.2"
+    command:
+      - --accept-terms-of-use
+      - --datadir=/consensus-data
+      # No peers to sync with in this testnet, so setting to 0
+      - --min-sync-peers=0
+      - --chain-config-file=/el-cl-genesis-data/metadata/config.yaml
+      - --genesis-state=/el-cl-genesis-data/metadata/genesis.ssz
+      - --execution-endpoint=http://geth:8551
+      # TODO: change me: get from genesis-node'senr  
+      - --bootstrap-node=enr:-Mq4QJftjSIm8l6C5CpbTjhpWmH4qHyQh4mVNVjfa7EbDQTeZPSq9UYIkKcXe_TkeOgrYSSjFUCxhqNFXkkhU5EH9ySGAZZDpDUrh2F0dG5ldHOIAAAAAAAGAACEZXRoMpBbbO2wYAAAACAAAAAAAAAAgmlkgnY0gmlwhJ_fRY2EcXVpY4IyyIlzZWNwMjU2azGhA6hwftzefFdjZCtm5Ii44WEjIZwIBpSqAu17i6dJJI9ZiHN5bmNuZXRzD4N0Y3CCMsiDdWRwgi7g
+      # We specify the chain id used by our execution client
+      - --contract-deployment-block=0
+      - --chain-id=245333333
+      - --rpc-host=0.0.0.0
+      - --rpc-port=3500
+      - --grpc-gateway-host=0.0.0.0
+      - --grpc-gateway-corsdomain=*
+      - --grpc-gateway-port=4000
+      - --p2p-host-ip=${IP_ADDRESS}
+      - --p2p-tcp-port=13000
+      - --p2p-udp-port=12000
+
+      - --jwt-secret=/el-cl-genesis-data/jwt/jwtsecret
+      - --suggested-fee-recipient=0x123463a4b065722e99115d6c222f267d9cabb524
+      - --minimum-peers-per-subnet=0
+      - --enable-debug-rpc-endpoints
+      - --force-clear-db
+      - --slots-per-archive-point=32  # archival node:https://docs.prylabs.network/docs/advanced/beacon_node_api
+    ports:
+      - 4000:4000
+      - 3500:3500
+      - 8080:8080
+      - 6060:6060
+      - 9090:9090
+    volumes:
+      - ./consensus-data:/consensus-data 
+      - ../el-cl-genesis-data:/el-cl-genesis-data
+
+
+
+  # We run a validator client with 64, deterministically-generated keys that match
+  # The validator keys present in the beacon chain genesis state generated a few steps above.
+  validator:
+    image: "gcr.io/prysmaticlabs/prysm/validator:v5.3.2"
+    command:
+      - --beacon-rpc-gateway-provider=beacon-chain:4000
+      - --beacon-rpc-provider=beacon-chain:3500
+      - --datadir=/consensus-data
+      - --accept-terms-of-use
+      - --chain-config-file=/el-cl-genesis-data/metadata/config.yaml
+      # option1. specify the interop mode.
+      # - --interop-num-validators=64
+      # - --interop-start-index=0
+      # option2. specify the wallet dir and password file.
+      - --wallet-dir=/validator_keys
+      - --wallet-password-file=/password.txt
+    depends_on:
+      beacon-chain:
+        condition: service_started
+    volumes:
+      - ../el-cl-genesis-data:/el-cl-genesis-data
+      - ./consensus-data:/consensus-data
+      - ./password.txt:/password.txt
+      - ./validator_keys:/validator_keys
+
+  dora-explorer:
+    image: "pk910/dora-the-explorer:latest"
+    container_name: "dora-explorer"
+    command: -config=/config/config.yaml
+    volumes:
+      - ../dora:/config
+      - ../el-cl-genesis-data:/el-cl-genesis-data
+      # - ./validator-ranges:/validator-ranges
+    ports:
+      - "9777:8080"
+    depends_on:
+      beacon-chain:
+        condition: service_started
+    restart: unless-stopped
