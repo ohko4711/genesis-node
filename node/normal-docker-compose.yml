@@ -26,6 +26,8 @@ services:
       - --ws.addr=0.0.0.0
       - --ws.origins=*
       - --authrpc.vhosts=*
+      - --nat=extip:${IP_ADDRESS}
+      - --authrpc.port=8551
       - --authrpc.addr=0.0.0.0
       - --authrpc.jwtsecret=/el-cl-genesis-data/jwt/jwtsecret
       - --datadir=/execution-data
@@ -34,8 +36,8 @@ services:
       - --discovery.port=30303
       - --syncmode=full
       - --gcmode=archive
-      # TODO: change me: get from genesis-node's enr  
-      - --bootnodes=enr:-Mq4QJftjSIm8l6C5CpbTjhpWmH4qHyQh4mVNVjfa7EbDQTeZPSq9UYIkKcXe_TkeOgrYSSjFUCxhqNFXkkhU5EH9ySGAZZDpDUrh2F0dG5ldHOIAAAAAAAGAACEZXRoMpBbbO2wYAAAACAAAAAAAAAAgmlkgnY0gmlwhJ_fRY2EcXVpY4IyyIlzZWNwMjU2azGhA6hwftzefFdjZCtm5Ii44WEjIZwIBpSqAu17i6dJJI9ZiHN5bmNuZXRzD4N0Y3CCMsiDdWRwgi7g
+      # TODO: change me: get from genesis-node log: `docker compose logs 2>&1 | grep 'enode'`
+      - --bootnodes=${EL_BOOTNODES}
     ports:
       - 8551:8551
       - 8545:8545
@@ -64,8 +66,10 @@ services:
       - --chain-config-file=/el-cl-genesis-data/metadata/config.yaml
       - --genesis-state=/el-cl-genesis-data/metadata/genesis.ssz
       - --execution-endpoint=http://geth:8551
-      # TODO: change me: get from genesis-node'senr  
-      - --bootstrap-node=enr:-Mq4QJftjSIm8l6C5CpbTjhpWmH4qHyQh4mVNVjfa7EbDQTeZPSq9UYIkKcXe_TkeOgrYSSjFUCxhqNFXkkhU5EH9ySGAZZDpDUrh2F0dG5ldHOIAAAAAAAGAACEZXRoMpBbbO2wYAAAACAAAAAAAAAAgmlkgnY0gmlwhJ_fRY2EcXVpY4IyyIlzZWNwMjU2azGhA6hwftzefFdjZCtm5Ii44WEjIZwIBpSqAu17i6dJJI9ZiHN5bmNuZXRzD4N0Y3CCMsiDdWRwgi7g
+      # TODO: change me: get from genesis-node's enr  
+      - --bootstrap-node=${CL_BOOTNODES}
+      - --peer=${CL_STATICPEERS}
+
       # We specify the chain id used by our execution client
       - --contract-deployment-block=0
       - --chain-id=245333333
