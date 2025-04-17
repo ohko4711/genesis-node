@@ -131,6 +131,8 @@ services:
       # - ./validator-ranges:/validator-ranges
     ports:
       - "9777:8080"
+    extra_hosts:
+      - "host.docker.internal:host-gateway"
     depends_on:
       beacon-chain:
         condition: service_started
