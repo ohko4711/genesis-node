@@ -59,17 +59,13 @@ services:
   beacon-chain:
     image: "gcr.io/prysmaticlabs/prysm/beacon-chain:v5.3.2"
     command:
-      - --accept-terms-of-use
+      - --verbosity=info
+      - --accept-terms-of-use=true
       - --datadir=/consensus-data
-      # No peers to sync with in this testnet, so setting to 0
-      - --min-sync-peers=0
       - --chain-config-file=/el-cl-genesis-data/metadata/config.yaml
       - --genesis-state=/el-cl-genesis-data/metadata/genesis.ssz
       - --execution-endpoint=http://geth:8551
-      - --bootstrap-node=
-      # We specify the chain id used by our execution client
-      - --contract-deployment-block=0
-      - --chain-id=245333333
+      - --enable-experimental-backfill=true
       - --rpc-host=0.0.0.0
       - --rpc-port=3500
       - --grpc-gateway-host=0.0.0.0
@@ -78,19 +74,22 @@ services:
       - --p2p-host-ip=${IP_ADDRESS}
       - --p2p-tcp-port=13000
       - --p2p-udp-port=12000
-
+      - --min-sync-peers=0
+      - --suggested-fee-recipient=0x6D39C4E60dEf1DfC6d09A8FdB5D075e85F0e5F8d
       - --jwt-secret=/el-cl-genesis-data/jwt/jwtsecret
-      - --suggested-fee-recipient=0x123463a4b065722e99115d6c222f267d9cabb524
-      - --minimum-peers-per-subnet=0
-      - --enable-debug-rpc-endpoints
-      - --force-clear-db
-      - --slots-per-archive-point=32  # archival node:https://docs.prylabs.network/docs/advanced/beacon_node_api
+      - --disable-monitoring=false
+      - --monitoring-host=0.0.0.0
+      - --monitoring-port=8080
+      - --bootstrap-node=
+      - --peer=${CL_STATICPEERS}
+      - --subscribe-all-subnets=true
+      - --p2p-static-id=true
     ports:
-      - 4000:4000
-      - 3500:3500
-      - 8080:8080
-      - 6060:6060
-      - 9090:9090
+      - "12000:12000/udp"
+      - "13000:13000/tcp" 
+      - "3500:3500"
+      - "4000:4000"
+      - "8080:8080"
     volumes:
       - ./consensus-data:/consensus-data 
       - ../el-cl-genesis-data:/el-cl-genesis-data
