@@ -12,6 +12,7 @@ services:
   geth:
     image: "ethereum/client-go:latest"
     command:
+      - --networkid=245333333
       - --state.scheme=hash
       - --verbosity=3
       - --http

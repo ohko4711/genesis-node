@@ -13,44 +13,42 @@ services:
   geth:
     image: "ethereum/client-go:latest"
     command:
+      - --networkid=245333333
       - --state.scheme=hash
       - --verbosity=3
+      - --datadir=/execution-data
       - --http
-      - --http.api=eth,net,web3,admin,debug
+      - --http.addr=0.0.0.0
       - --http.port=8545
       - --http.vhosts=*
-      - --http.addr=0.0.0.0
       - --http.corsdomain=*
+      - --http.api=admin,engine,net,eth,web3,debug
       - --ws
-      - --ws.api=eth,net,web3,admin,debug
       - --ws.addr=0.0.0.0
+      - --ws.port=8546
+      - --ws.api=admin,engine,net,eth,web3,debug
       - --ws.origins=*
-      - --authrpc.vhosts=*
+      - --allow-insecure-unlock
       - --nat=extip:${IP_ADDRESS}
       - --authrpc.port=8551
       - --authrpc.addr=0.0.0.0
+      - --authrpc.vhosts=*
       - --authrpc.jwtsecret=/el-cl-genesis-data/jwt/jwtsecret
-      - --datadir=/execution-data
-      - --allow-insecure-unlock
+      - --syncmode=full
+      - --rpc.allow-unprotected-txs
       - --port=30303
       - --discovery.port=30303
-      - --syncmode=full
-      - --gcmode=archive
-      # TODO: change me: get from genesis-node log: `docker compose logs 2>&1 | grep 'enode'`
       - --bootnodes=${EL_BOOTNODES}
-    ports:
-      - 8551:8551
-      - 8545:8545
-      - 8546:8546
-      - 30303:30303
-    depends_on:
-      geth-genesis:
-        condition: service_completed_successfully
-      beacon-chain:
-        condition: service_started
     volumes:
       - ./execution-data:/execution-data
       - ../el-cl-genesis-data:/el-cl-genesis-data
+    ports:
+      - "8545:8545" 
+      - "8546:8546" 
+      - "8551:8551" 
+      - "30303:30303/tcp"
+      - "30303:30303/udp"
+    restart: unless-stopped
 
   # Runs a Prysm beacon chain from a specified genesis state created in the previous step
   # and connects to go-ethereum in the same network as the execution client.
@@ -59,20 +57,13 @@ services:
   beacon-chain:
     image: "gcr.io/prysmaticlabs/prysm/beacon-chain:v5.3.2"
     command:
-      - --accept-terms-of-use
+      - --verbosity=debug
+      - --accept-terms-of-use=true
       - --datadir=/consensus-data
-      # No peers to sync with in this testnet, so setting to 0
-      - --min-sync-peers=0
       - --chain-config-file=/el-cl-genesis-data/metadata/config.yaml
       - --genesis-state=/el-cl-genesis-data/metadata/genesis.ssz
       - --execution-endpoint=http://geth:8551
-      # TODO: change me: get from genesis-node's enr  
-      - --bootstrap-node=${CL_BOOTNODES}
-      - --peer=${CL_STATICPEERS}
-
-      # We specify the chain id used by our execution client
-      - --contract-deployment-block=0
-      - --chain-id=245333333
+      - --enable-experimental-backfill=true
       - --rpc-host=0.0.0.0
       - --rpc-port=3500
       - --grpc-gateway-host=0.0.0.0
@@ -81,23 +72,29 @@ services:
       - --p2p-host-ip=${IP_ADDRESS}
       - --p2p-tcp-port=13000
       - --p2p-udp-port=12000
-
+      - --min-sync-peers=1
+      - --suggested-fee-recipient=0x6D39C4E60dEf1DfC6d09A8FdB5D075e85F0e5F8d
       - --jwt-secret=/el-cl-genesis-data/jwt/jwtsecret
-      - --suggested-fee-recipient=0x123463a4b065722e99115d6c222f267d9cabb524
-      - --minimum-peers-per-subnet=0
-      - --enable-debug-rpc-endpoints
-      - --force-clear-db
-      - --slots-per-archive-point=32  # archival node:https://docs.prylabs.network/docs/advanced/beacon_node_api
+      - --disable-monitoring=false
+      - --monitoring-host=0.0.0.0
+      - --monitoring-port=8080
+      - --bootstrap-node=${CL_BOOTNODES}
+      - --peer=${CL_STATICPEERS}
+      - --subscribe-all-subnets=true
+      - --p2p-static-id=true
     ports:
       - 4000:4000
       - 3500:3500
       - 8080:8080
       - 6060:6060
       - 9090:9090
+      - 12000:12000/udp
+      - 13000:13000/tcp
     volumes:
       - ./consensus-data:/consensus-data 
       - ../el-cl-genesis-data:/el-cl-genesis-data
-
+    depends_on:
+      - geth
 
 
   # We run a validator client with 64, deterministically-generated keys that match
