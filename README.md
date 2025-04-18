@@ -32,7 +32,12 @@ cd node/ethstaker-deposit-cli
 
 install env ref:https://deposit-cli.ethstaker.cc/other_install_options.html#option-2-build-deposit-cli-with-virtualenv
 
+# first time for genesis validator keys
 python3 -m ethstaker_deposit existing-mnemonic  --num_validators=64 --validator_start_index=0 --withdrawal_address "0x55A4255DcD8e41B588Fb54E11Afc8A34D791ab1d" --mnemonic "sleep moment list remain like wall lake industry canvas wonder ecology elite duck salad naive syrup frame brass utility club odor country obey pudding" --mnemonic_language=english  --folder=.. --keystore_password=0123456789.eth  --chain custom
+
+# second time for new validator join network
+python3 -m ethstaker_deposit existing-mnemonic  --num_validators=2 --validator_start_index=64 --withdrawal_address "0x55A4255DcD8e41B588Fb54E11Afc8A34D791ab1d" --mnemonic "sleep moment list remain like wall lake industry canvas wonder ecology elite duck salad naive syrup frame brass utility club odor country obey pudding" --mnemonic_language=english  --folder=../second-batch_validator_keys  --keystore_password=0123456789.eth  --chain custom
+
 ```
 
 **prsym** 导入validator:
