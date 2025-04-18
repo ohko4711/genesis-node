@@ -1,11 +1,11 @@
 services:
   # Sets up the genesis configuration for the go-ethereum client from a JSON file.
-  geth-genesis:
-    image: "ethereum/client-go:latest"
-    command: -state.scheme=hash --datadir=/execution-data init  /el-cl-genesis-data/metadata/genesis.json
-    volumes:
-      - ./execution-data:/execution-data
-      - ../el-cl-genesis-data:/el-cl-genesis-data
+  # geth-genesis:
+  #   image: "ethereum/client-go:latest"
+  #   command: -state.scheme=path --datadir=/execution-data init  /el-cl-genesis-data/metadata/genesis.json
+  #   volumes:
+  #     - ./execution-data:/execution-data
+  #     - ../el-cl-genesis-data:/el-cl-genesis-data
 
   # Runs the go-ethereum execution client with the specified, unlocked account and necessary
   # APIs to allow for proof-of-stake consensus via Prysm.
@@ -13,7 +13,7 @@ services:
     image: "ethereum/client-go:latest"
     command:
       - --networkid=245333333
-      - --state.scheme=hash
+      - --state.scheme=path
       - --verbosity=3
       - --http
       - --http.api=eth,net,web3,admin,debug
@@ -35,8 +35,6 @@ services:
       - --allow-insecure-unlock
       - --port=30303
       - --discovery.port=30303
-      - --syncmode=full
-      - --gcmode=archive
       - --bootnodes=enr:-Iq4QJk4WqRkjsX5c2CXtOra6HnxN-BMXnWhmhEQO9Bn9iABTJGdjUOurM7Btj1ouKaFkvTRoju5vz2GPmVON2dffQKGAX53x8JigmlkgnY0gmlwhLKAlv6Jc2VjcDI1NmsxoQK6S-Cii_KmfFdUJL2TANL3ksaKUnNXvTCv1tLwXs0QgIN1ZHCCIyk
 
     ports:
@@ -45,8 +43,8 @@ services:
       - 8546:8546
       - 30303:30303
     depends_on:
-      geth-genesis:
-        condition: service_completed_successfully
+      # geth-genesis:
+      #   condition: service_completed_successfully
       beacon-chain:
         condition: service_started
     volumes:
@@ -82,7 +80,6 @@ services:
       - --monitoring-host=0.0.0.0
       - --monitoring-port=8080
       - --bootstrap-node=
-      - --peer=${CL_STATICPEERS}
       - --subscribe-all-subnets=true
       - --p2p-static-id=true
     ports:
