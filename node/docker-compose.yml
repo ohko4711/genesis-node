@@ -25,17 +25,17 @@ services:
       - --ws.api=eth,net,web3,admin,debug
       - --ws.addr=0.0.0.0
       - --ws.origins=*
-      - --authrpc.vhosts=*
       # important for bootnode ref:https://geth.ethereum.org/docs/fundamentals/private-network
       - --nat=extip:${IP_ADDRESS}
       - --authrpc.port=8551
       - --authrpc.addr=0.0.0.0
+      - --authrpc.vhosts=*
       - --authrpc.jwtsecret=/el-cl-genesis-data/jwt/jwtsecret
       - --datadir=/execution-data
       - --allow-insecure-unlock
       - --port=30303
       - --discovery.port=30303
-      - --bootnodes=enr:-Iq4QJk4WqRkjsX5c2CXtOra6HnxN-BMXnWhmhEQO9Bn9iABTJGdjUOurM7Btj1ouKaFkvTRoju5vz2GPmVON2dffQKGAX53x8JigmlkgnY0gmlwhLKAlv6Jc2VjcDI1NmsxoQK6S-Cii_KmfFdUJL2TANL3ksaKUnNXvTCv1tLwXs0QgIN1ZHCCIyk
+      # - --bootnodes=enr:-Iq4QJk4WqRkjsX5c2CXtOra6HnxN-BMXnWhmhEQO9Bn9iABTJGdjUOurM7Btj1ouKaFkvTRoju5vz2GPmVON2dffQKGAX53x8JigmlkgnY0gmlwhLKAlv6Jc2VjcDI1NmsxoQK6S-Cii_KmfFdUJL2TANL3ksaKUnNXvTCv1tLwXs0QgIN1ZHCCIyk
 
     ports:
       - 8551:8551
