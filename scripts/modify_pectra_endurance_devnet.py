@@ -8,7 +8,7 @@ PRAGUE_EPOCH = 1
 GENESIS_TIME = 1745217000
 PECTRA_TIME = GENESIS_TIME + PRAGUE_EPOCH * 32 * 12
 DEPOSIT_CONTRACT_ADDRESS = "0x6f22fFbC56eFF051aECF839396DD1eD9aD6BBA9D"
-DEFAULT_CONFIG_DIR = "../el-cl-genesis-data/custom_config_data"
+DEFAULT_CONFIG_DIR = "../el-cl-genesis-data/metadata"
 
 def update_json_file(file_path, update_function):
     """Generic function to update a JSON file with backup"""
