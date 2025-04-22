@@ -6,7 +6,7 @@ require("dotenv").config();
 
 // ENV
 const {
-    PROVIDER_URL: providerUrl,
+    DEVNET_RPC_URL: providerUrl,
     PRIVATE_KEY: privateKey,
     CONTRACT_ADDRESS: contractAddress,
     GAS_LIMIT: gasLimit,

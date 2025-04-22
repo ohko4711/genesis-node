@@ -4,3 +4,5 @@ make all:
 
 	# 2. 启动节点
 	./down.sh && ./clean.sh && ./initGeth.sh && ./start.sh 
+make node:
+	./down.sh && ./clean.sh && ./initGeth.sh && ./start.sh 
