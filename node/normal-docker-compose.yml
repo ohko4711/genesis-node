@@ -1,20 +1,12 @@
 # 普通节点的启动配置,主要区别在于需要指定genesis-node's bootinfo 
 services:
-  # Sets up the genesis configuration for the go-ethereum client from a JSON file.
-  geth-genesis:
-    image: "ethereum/client-go:latest"
-    command: -state.scheme=hash --datadir=/execution-data init  /el-cl-genesis-data/metadata/genesis.json
-    volumes:
-      - ./execution-data:/execution-data
-      - ../el-cl-genesis-data:/el-cl-genesis-data
 
-  # Runs the go-ethereum execution client with the specified, unlocked account and necessary
-  # APIs to allow for proof-of-stake consensus via Prysm.
+
   geth:
     image: "ethereum/client-go:latest"
     command:
       - --networkid=245333333
-      - --state.scheme=hash
+      - --state.scheme=path
       - --verbosity=3
       - --datadir=/execution-data
       - --http
@@ -72,7 +64,7 @@ services:
       - --p2p-host-ip=${IP_ADDRESS}
       - --p2p-tcp-port=13000
       - --p2p-udp-port=12000
-      - --min-sync-peers=1
+      - --min-sync-peers=0
       - --suggested-fee-recipient=0x6D39C4E60dEf1DfC6d09A8FdB5D075e85F0e5F8d
       - --jwt-secret=/el-cl-genesis-data/jwt/jwtsecret
       - --disable-monitoring=false
