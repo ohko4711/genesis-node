@@ -1,5 +1,5 @@
 logging:
-  outputLevel: "debug"
+  outputLevel: "info"
 
 # Chain network configuration
 chain:
@@ -36,7 +36,7 @@ beaconapi:
   # CL Client RPC
   endpoints:
     # 容器内访问host服务
-    - url: "http://host.docker.internal:4000"
+    - url: "http://135.181.2.253:4000"
       name: "geth-lighthouse"
       archive: true
 
@@ -51,7 +51,7 @@ executionapi:
   # execution node rpc endpoints
   endpoints:
     - name: "local"
-      url: "http://host.docker.internal:8545"
+      url: "http://135.181.2.253:8545"
 
   # batch size for log event calls
   depositLogBatchSize: 1000
