@@ -1,7 +1,7 @@
 el-cl-genesis-data*
 
-node/execution-data
-node/consensus-data
+**/execution-data
+**/consensus-data
 
 deposit
 validator_keys
