@@ -85,7 +85,7 @@ services:
       - --debug-level=info
       - --testnet-dir=/el-cl-genesis-data/custom_config_data
       - --validators-dir=/validator_keys
-      - --secrets-dir=/secrets
+      - --secrets-dir=/validator_keys_secrets
       - --http
       - --http-address=0.0.0.0
       - --http-port=5062
@@ -101,7 +101,7 @@ services:
     volumes:
       - ../el-cl-genesis-data:/el-cl-genesis-data
       - ./validator_keys:/validator_keys
-      - ./secrets:/secrets
+      - ./validator_keys_secrets:/validator_keys_secrets
     ports:
       - "5062:5062"
       - "5064:5064"
