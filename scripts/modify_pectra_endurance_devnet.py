@@ -8,20 +8,15 @@ PRAGUE_EPOCH = 1
 GENESIS_TIME = 1745217000
 PECTRA_TIME = GENESIS_TIME + PRAGUE_EPOCH * 32 * 12
 DEPOSIT_CONTRACT_ADDRESS = "0x6f22fFbC56eFF051aECF839396DD1eD9aD6BBA9D"
-DEFAULT_CONFIG_DIR = "../el-cl-genesis-data/metadata"
+DEFAULT_CONFIG_DIR = "../el-cl-genesis-data/custom_config_data"
 
 def update_json_file(file_path, update_function):
-    """Generic function to update a JSON file with backup"""
+    """Generic function to update a JSON file"""
     # Extract filename from path
     filename = os.path.basename(file_path)
-    backup_file_path = file_path.replace(filename, f"{os.path.splitext(filename)[0]}_prague_backup.json")
     temp_output_path = file_path.replace(filename, f"{os.path.splitext(filename)[0]}_temp.json")
     
     print(f"Processing {file_path}...")
-    # Backup the original file
-    shutil.copy(file_path, backup_file_path)
-    print(f"Backup created at {backup_file_path}")
-    
     # Read the file
     with open(file_path, 'r', encoding='utf-8') as input_file:
         data = json.load(input_file)
