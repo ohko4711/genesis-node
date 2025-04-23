@@ -104,7 +104,6 @@ services:
       - --metrics.address=0.0.0.0 
       - --metrics.port=8009
       - --graffiti=Besu-Lodestar
-      - --builder
     volumes:
       - ../el-cl-genesis-data:/el-cl-genesis-data
       - ./consensus-data:/consensus-data
