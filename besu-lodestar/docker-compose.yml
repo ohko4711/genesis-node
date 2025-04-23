@@ -35,7 +35,7 @@ services:
       - --tx-pool-max-future-by-sender=100000
     volumes:
       - ./execution-data:/execution-data
-      - ./el-cl-genesis-data:/el-cl-genesis-data
+      - ../el-cl-genesis-data:/el-cl-genesis-data
     ports:
       - "8545:8545" 
       - "8546:8546" 
@@ -76,7 +76,7 @@ services:
       - --bootnodes=${CL_BOOTNODES}
     volumes:
       - ./consensus-data:/consensus-data 
-      - ./el-cl-genesis-data:/el-cl-genesis-data
+      - ../el-cl-genesis-data:/el-cl-genesis-data
     ports:
       - "11800:11800/tcp"
       - "11800:11800/udp"
@@ -106,7 +106,7 @@ services:
       - --graffiti=Besu-Lodestar
       - --builder
     volumes:
-      - ./el-cl-genesis-data:/el-cl-genesis-data
+      - ../el-cl-genesis-data:/el-cl-genesis-data
       - ./consensus-data:/consensus-data
       - ./validator_keys:/validator_keys
       - ./password.txt:/password.txt
