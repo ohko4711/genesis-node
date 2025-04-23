@@ -60,7 +60,7 @@ services:
       - --metrics-address=0.0.0.0
       - --metrics-allow-origin=*
       - --metrics-port=5054
-      - --trusted-peers=${CL_STATICPEERS}
+      - --trusted-peers=${CL_TRUSTPEERS}
       - --boot-nodes=${CL_BOOTNODES}
       - --subscribe-all-subnets
       - --import-all-attestations
