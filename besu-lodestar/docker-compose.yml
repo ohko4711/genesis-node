@@ -1,0 +1,119 @@
+services:
+  execution:
+    image: hyperledger/besu:25.4.1
+    environment:
+      - BESU_OPTS=-Xmx16g
+    user: "root"
+    command:
+      - --logging=INFO
+      - --data-path=/execution-data
+      - --genesis-file=/el-cl-genesis-data/custom_config_data/besu.json
+      - --network-id=6480000002
+      - --host-allowlist=*
+      - --rpc-http-enabled=true
+      - --rpc-http-host=0.0.0.0
+      - --rpc-http-port=8545
+      - --rpc-http-api=ADMIN,CLIQUE,ETH,NET,DEBUG,TXPOOL,ENGINE,TRACE,WEB3
+      - --rpc-http-cors-origins=*
+      - --rpc-ws-enabled=true
+      - --rpc-ws-host=0.0.0.0
+      - --rpc-ws-port=8546
+      - --rpc-ws-api=ADMIN,CLIQUE,ETH,NET,DEBUG,TXPOOL,ENGINE,TRACE,WEB3
+      - --p2p-enabled=true
+      - --p2p-host=${IP_ADDRESS}
+      - --p2p-port=30303
+      - --engine-rpc-enabled=true
+      - --engine-jwt-secret=/el-cl-genesis-data/jwt/jwtsecret
+      - --engine-host-allowlist=*
+      - --engine-rpc-port=8551
+      - --sync-mode=FULL
+      - --data-storage-format=BONSAI
+      - --metrics-enabled=true
+      - --metrics-host=0.0.0.0
+      - --metrics-port=9001
+      - --bootnodes=${EL_BOOTNODES}
+      - --tx-pool-max-future-by-sender=100000
+    volumes:
+      - ./execution-data:/execution-data
+      - ./el-cl-genesis-data:/el-cl-genesis-data
+    ports:
+      - "8545:8545" 
+      - "8546:8546" 
+      - "8551:8551" 
+      - "9001:9001" 
+      - "30303:30303"
+    restart: unless-stopped
+
+  beacon:
+    image: chainsafe/lodestar:v1.28.1
+    command:
+      - beacon 
+      - --logLevel=info
+      - --port=11800
+      - --discoveryPort=11800
+      - --dataDir=/consensus-data
+      - --paramsFile=/el-cl-genesis-data/custom_config_data/config.yaml
+      - --genesisStateFile=/el-cl-genesis-data/custom_config_data/genesis.ssz
+      - --eth1.depositContractDeployBlock=0
+      - --network.connectToDiscv5Bootnodes=true
+      - --discv5=true
+      - --eth1=true
+      - --eth1.providerUrls=http://execution:8545
+      - --execution.urls=http://execution:8551
+      - --rest=true
+      - --rest.address=0.0.0.0
+      - --rest.namespace=*
+      - --rest.port=4000
+      - --nat=true
+      - --enr.ip=${IP_ADDRESS}
+      - --enr.tcp=11800
+      - --enr.udp=11800
+      - --subscribeAllSubnets=true
+      - --jwt-secret=/el-cl-genesis-data/jwt/jwtsecret
+      - --metrics
+      - --metrics.address=0.0.0.0
+      - --metrics.port=8008
+      - --bootnodes=${CL_BOOTNODES}
+    volumes:
+      - ./consensus-data:/consensus-data 
+      - ./el-cl-genesis-data:/el-cl-genesis-data
+    ports:
+      - "11800:11800/tcp"
+      - "11800:11800/udp"
+      - "4000:4000"
+      - "8008:8008"
+    depends_on:
+      - execution
+    restart: unless-stopped
+    stop_signal: SIGINT
+    stop_grace_period: 1m
+
+  validator:
+    image: chainsafe/lodestar:v1.28.1
+    user: "root"
+    command:
+      - validator
+      - --logLevel=info 
+      - --dataDir=/consensus-data/validator 
+      - --paramsFile=/el-cl-genesis-data/custom_config_data/config.yaml 
+      - --beaconNodes=http://beacon:4000 
+      - --importKeystores=/validator_keys
+      - --importKeystoresPassword=/password.txt
+      - --suggestedFeeRecipient=0x55A4255DcD8e41B588Fb54E11Afc8A34D791ab1d 
+      - --metrics 
+      - --metrics.address=0.0.0.0 
+      - --metrics.port=8009
+      - --graffiti=Besu-Lodestar
+      - --builder
+    volumes:
+      - ./el-cl-genesis-data:/el-cl-genesis-data
+      - ./consensus-data:/consensus-data
+      - ./validator_keys:/validator_keys
+      - ./password.txt:/password.txt
+    ports:
+      - "8009:8009"
+    depends_on:
+      - beacon
+    restart: unless-stopped
+    stop_signal: SIGINT
+    stop_grace_period: 1m
