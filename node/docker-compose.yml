@@ -52,6 +52,7 @@ services:
     volumes:
       - ./execution-data:/execution-data
       - ../el-cl-genesis-data:/el-cl-genesis-data
+    restart: unless-stopped
 
   # Runs a Prysm beacon chain from a specified genesis state created in the previous step
   # and connects to go-ethereum in the same network as the execution client.
@@ -93,6 +94,7 @@ services:
     volumes:
       - ./consensus-data:/consensus-data 
       - ../el-cl-genesis-data:/el-cl-genesis-data
+    restart: unless-stopped
 
 
 
@@ -120,6 +122,7 @@ services:
       - ./consensus-data:/consensus-data
       - ./password.txt:/password.txt
       - ./validator_keys:/validator_keys
+    restart: unless-stopped
 
   dora-explorer:
     image: "pk910/dora-the-explorer:latest"

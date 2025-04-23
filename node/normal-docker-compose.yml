@@ -87,6 +87,7 @@ services:
       - ../el-cl-genesis-data:/el-cl-genesis-data
     depends_on:
       - geth
+    restart: unless-stopped
 
 
   # We run a validator client with 64, deterministically-generated keys that match
@@ -109,3 +110,4 @@ services:
   #     - ./consensus-data:/consensus-data
   #     - ./password.txt:/password.txt
   #     - ./validator_keys:/validator_keys
+  #   restart: unless-stopped
