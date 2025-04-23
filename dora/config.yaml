@@ -4,7 +4,7 @@ logging:
 # Chain network configuration
 chain:
   name: "endurance-devnet"
-  configPath: "/el-cl-genesis-data/metadata/config.yaml"
+  configPath: "/el-cl-genesis-data/custom_config_data/config.yaml"
   displayName: "Endurance Devnet"
 
 # HTTP Server configuration
