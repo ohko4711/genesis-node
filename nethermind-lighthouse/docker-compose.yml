@@ -52,7 +52,7 @@ services:
       - --http
       - --http-address=0.0.0.0
       - --http-port=5052
-      - --http-allow-sync-stalled
+      - --http-allow-origin=*
       - --execution-endpoints=http://execution:8551
       - --jwt-secrets=/el-cl-genesis-data/jwt/jwtsecret
       - --suggested-fee-recipient=0x55A4255DcD8e41B588Fb54E11Afc8A34D791ab1d
