@@ -60,6 +60,8 @@ services:
       - --metrics-address=0.0.0.0
       - --metrics-allow-origin=*
       - --metrics-port=5054
+      # for genesis node only have one node
+      - --target-peers=1 
       - --trusted-peers=${CL_TRUSTPEERS}
       - --boot-nodes=${CL_BOOTNODES}
       - --subscribe-all-subnets
