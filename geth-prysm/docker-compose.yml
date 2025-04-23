@@ -64,8 +64,8 @@ services:
       - --verbosity=info
       - --accept-terms-of-use=true
       - --datadir=/consensus-data
-      - --chain-config-file=/el-cl-genesis-data/metadata/config.yaml
-      - --genesis-state=/el-cl-genesis-data/metadata/genesis.ssz
+      - --chain-config-file=/el-cl-genesis-data/custom_config_data/config.yaml
+      - --genesis-state=/el-cl-genesis-data/custom_config_data/genesis.ssz
       - --execution-endpoint=http://geth:8551
       - --enable-experimental-backfill=true
       - --rpc-host=0.0.0.0
@@ -107,7 +107,7 @@ services:
       - --beacon-rpc-provider=beacon-chain:3500
       - --datadir=/consensus-data
       - --accept-terms-of-use
-      - --chain-config-file=/el-cl-genesis-data/metadata/config.yaml
+      - --chain-config-file=/el-cl-genesis-data/custom_config_data/config.yaml
       - --wallet-dir=/validator_keys
       - --wallet-password-file=/password.txt
     depends_on:
