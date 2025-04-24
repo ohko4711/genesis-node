@@ -40,8 +40,14 @@ beaconapi:
   endpoints:
     # 容器内访问host服务
     - url: "http://135.181.2.253:4000"
-      name: "geth-lighthouse"
+      name: "geth-prysm"
       archive: true
+    - url: "http://57.155.181.23:4000"
+      name: "besu-lodestar"
+ 
+    - url: "http://65.108.127.114:5052"
+      name: "nethermind-lighthouse"
+
 
   # local cache for page models
   localCacheSize: 10 # 10MB
@@ -53,8 +59,13 @@ beaconapi:
 executionapi:
   # execution node rpc endpoints
   endpoints:
-    - name: "local"
+    - name: "geth"
       url: "http://135.181.2.253:8545"
+    - name: "besu"
+      url: "http://57.155.181.23:8545"
+    - name: "nethermind"
+      url: "http://65.108.127.114:8545"
+
 
   # batch size for log event calls
   depositLogBatchSize: 1000
