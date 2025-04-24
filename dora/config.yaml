@@ -5,7 +5,7 @@ logging:
 chain:
   name: "endurance-devnet"
   configPath: "/el-cl-genesis-data/custom_config_data/config.yaml"
-  displayName: "Endurance Devnet"
+  displayName: "Endurance Pectra Devnet-1"
 
 # HTTP Server configuration
 server:
@@ -18,7 +18,7 @@ frontend:
   minimize: false # minimize html templates
 
   # Name of the site, displayed in the title tag
-  siteName: "Endurance Devnet"
+  siteName: "Endurance Pectra Devnet-1"
   siteSubtitle: "Dora the Explorer"
 
   # link to EL Explorer
