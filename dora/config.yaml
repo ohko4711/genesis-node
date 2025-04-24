@@ -23,14 +23,17 @@ frontend:
 
   # link to EL Explorer
   ethExplorerLink: ""
-  rainbowkitProjectId: "7ef7824583418b0e3914c981bd833ace"
 
   # file or inventory url to load validator names from
   # validatorNamesYaml: "/validator-ranges/validator_names.yaml"
 
-  # Electra related
+  # frontend features
+  showSensitivePeerInfos: true
+  showPeerDASInfos: true
   showSubmitDeposit: true
   showSubmitElRequests: true
+  publicRpcUrl: "http://135.181.2.253:8545"    # Use ssh tunnel if not accessible. command: ssh <VPS OR NODE IP> -L 8545:localhost:8545 # or use a publicRPC
+  rainbowkitProjectId: "7ef7824583418b0e3914c981bd833ace"   # Get one from https://cloud.reown.com/, it's free, but still works without?
 
 beaconapi:
   # CL Client RPC
