@@ -10,6 +10,8 @@ echo "Using IP address: $IP_ADDRESS"
 
 # mev-builder and mev-boost-relay in same machine
 export BEACON_URLS=http://${IP_ADDRESS}:5052
-export EXECUTION_URL=http://${IP_ADDRESS}:8545
+
+# rbuilder json-rpc-port
+export EXECUTION_URL=http://${IP_ADDRESS}:8645
 
 docker compose up -d
