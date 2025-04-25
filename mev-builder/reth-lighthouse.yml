@@ -30,6 +30,7 @@ services:
     volumes:
       - ./execution-data:/execution-data
       - ../el-cl-genesis-data:/el-cl-genesis-data
+      - /tmp/reth.ipc:/tmp/reth.ipc
     ports:
       - "8545:8545" 
       - "8546:8546" 
