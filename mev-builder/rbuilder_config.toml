@@ -9,7 +9,7 @@ full_telemetry_server_ip = "0.0.0.0"
 
 reth_datadir = "./execution-data"
 
-relay_secret_key = "0x2fc12ae741f29701f8e30f5de6350766c020cb80768a0ff01e6838ffd2431e11"
+relay_secret_key = "0x51da11b45a7219cc61a3d9c5fd08c7eebd602a6a19a977f8d3771d5711a55123"
 
 
 # cl_node_url can be a single value, array of values, or passed by an environment variables with values separated with a comma
@@ -31,8 +31,8 @@ live_builders = ["mp-ordering", "mgp-ordering"]
 #enabled_relays = ["flashbots"]
 
 # fix: Error: root_hash_use_sparse_trie=true and root_hash_compare_sparse_trie=false must be set, otherwise node will produce incorrect blocks or confusing error messages. These settings are enforced temporarily because upstream parallel root hash implementation is not correct.
-root_hash_use_sparse_trie=true
-root_hash_compare_sparse_trie=false
+root_hash_use_sparse_trie = true
+root_hash_compare_sparse_trie = false
 
 
 # This can be used with test-relay
@@ -56,4 +56,3 @@ discard_txs = true
 sorting = "max-profit"
 failed_order_retries = 1
 drop_failed_orders = true
-
