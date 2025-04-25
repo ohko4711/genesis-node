@@ -23,7 +23,7 @@ ExecStart=/usr/local/bin/reth node \
   --ws.port=8546 \
   --ws.api=net,eth,flashbots \
   --ws.origins=* \
-  --nat=extip=${IP_ADDRESS} \
+  --nat=extip:${IP_ADDRESS} \
   --authrpc.port=8551 \
   --authrpc.jwtsecret=/opt/el-cl-genesis-data/jwt/jwtsecret \
   --authrpc.addr=0.0.0.0 \
