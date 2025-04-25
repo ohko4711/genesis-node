@@ -1,0 +1,94 @@
+services:
+  redis:
+    image: redis
+    restart: always
+
+  memcached:
+    image: memcached
+    restart: always
+
+  db:
+    image: postgres
+    restart: always
+    volumes:
+      - './postgres-data:/var/lib/postgresql/data'
+    environment:
+      POSTGRES_USER: postgres
+      POSTGRES_PASSWORD: fsgfdsgdsgdfgdfgsdg
+      POSTGRES_DB: postgres
+
+  housekeeper:
+    image: flashbots/mev-boost-relay:0.30.0rc1
+    restart: on-failure
+    environment:
+      GENESIS_FORK_VERSION: "0x10000001"
+      GENESIS_VALIDATORS_ROOT: "0xc7c839d42b58f8974b8af383e6d741ab4fb6e9a871007caf9087262ea5669e2b"
+      BELLATRIX_FORK_VERSION: "0x30000001"
+      CAPELLA_FORK_VERSION: "0x40000001"
+      DENEB_FORK_VERSION: "0x50000001"
+      PECTRA_FORK_VERSION: "0x60000001"
+    command:
+      housekeeper
+      --network custom
+      --db postgres://postgres:fsgfdsgdsgdfgdfgsdg@db:5432/postgres?sslmode=disable
+      --beacon-uris ${BEACON_URLS}
+      --redis-uri redis:6379
+    depends_on:
+      - redis
+      - memcached
+      - db
+
+  api:
+    image: flashbots/mev-boost-relay:0.30.0rc1
+    restart: on-failure
+    environment:
+      GENESIS_FORK_VERSION: "0x10000001"
+      GENESIS_VALIDATORS_ROOT: "0xc7c839d42b58f8974b8af383e6d741ab4fb6e9a871007caf9087262ea5669e2b"
+      BELLATRIX_FORK_VERSION: "0x30000001"
+      CAPELLA_FORK_VERSION: "0x40000001"
+      DENEB_FORK_VERSION: "0x50000001"
+      PECTRA_FORK_VERSION: "0x60000001"
+    ports:
+      - "9062:9062"
+    command: 
+      api
+      --network custom
+      --secret-key 0x51da11b45a7219cc61a3d9c5fd08c7eebd602a6a19a977f8d3771d5711a55123
+      --db postgres://postgres:fsgfdsgdsgdfgdfgsdg@db:5432/postgres?sslmode=disable
+      --beacon-uris ${BEACON_URLS}
+      --blocksim ${EXECUTION_URL}
+      --listen-addr 0.0.0.0:9062
+      --redis-uri redis:6379
+      --memcached-uris memcached:11211
+      --debug true
+      --loglevel debug
+    depends_on:
+      - redis
+      - memcached
+      - db
+
+  website:
+    image: flashbots/mev-boost-relay:0.30.0rc1
+    restart: on-failure
+    environment:
+      GENESIS_FORK_VERSION: "0x10000001"
+      GENESIS_VALIDATORS_ROOT: "0xc7c839d42b58f8974b8af383e6d741ab4fb6e9a871007caf9087262ea5669e2b"
+      BELLATRIX_FORK_VERSION: "0x30000001"
+      CAPELLA_FORK_VERSION: "0x40000001"
+      DENEB_FORK_VERSION: "0x50000001"
+      PECTRA_FORK_VERSION: "0x60000001"
+    ports:
+      - "9060:9060"
+    command:
+      website
+      --network custom
+      --db postgres://postgres:fsgfdsgdsgdfgdfgsdg@db:5432/postgres?sslmode=disable
+      --listen-addr 0.0.0.0:9060
+      --redis-uri redis:6379
+      --link-beaconchain http://135.181.2.253:9777/
+      --link-data-api http://${IP_ADDRESS}:9062 /
+      --link-etherscan https://explorer-endurance.fusionist.io/
+    depends_on:
+      - redis
+      - memcached
+      - db
