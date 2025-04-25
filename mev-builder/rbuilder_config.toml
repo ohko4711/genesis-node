@@ -22,8 +22,9 @@ extra_data = "pectra-devnet-1-builder"
 
 ignore_cancellable_orders = true
 
-# watchdog_timeout_sec = 600
-# simulation_threads = 4
+# ref:https://collective.flashbots.net/t/announcing-multi-client-support-for-rbuilder/4895
+watchdog_timeout_sec = 600
+simulation_threads = 4
 
 sbundle_mergeable_signers = []
 live_builders = ["mp-ordering", "mgp-ordering"]
@@ -39,7 +40,7 @@ root_hash_compare_sparse_trie = false
 [[relays]]
 name = "local-relay"
 url = "http://localhost:9062"
-priority = 10
+priority = 0
 
 [[builders]]
 name = "mgp-ordering"
