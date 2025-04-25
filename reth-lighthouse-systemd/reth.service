@@ -1,0 +1,42 @@
+[Unit]
+Description=Reth Execution Layer Node
+After=network.target
+
+[Service]
+Type=simple
+EnvironmentFile=/etc/default/reth
+ExecStart=/usr/local/bin/reth node \
+  -vvv \
+  --datadir=/opt/execution-data \
+  --chain=/opt/el-cl-genesis-data/custom_config_data/genesis.json \
+  --addr=0.0.0.0 \
+  --port=30303 \
+  --discovery.port=30303 \
+  --discovery.addr=0.0.0.0 \
+  --http \
+  --http.port=8545 \
+  --http.addr=0.0.0.0 \
+  --http.corsdomain=* \
+  --http.api=net,eth,web3,debug,trace,flashbots \
+  --ws \
+  --ws.addr=0.0.0.0 \
+  --ws.port=8546 \
+  --ws.api=net,eth,flashbots \
+  --ws.origins=* \
+  --nat=extip=${IP_ADDRESS} \
+  --authrpc.port=8551 \
+  --authrpc.jwtsecret=/opt/el-cl-genesis-data/jwt/jwtsecret \
+  --authrpc.addr=0.0.0.0 \
+  --metrics=0.0.0.0:9001 \
+  --bootnodes=${EL_BOOTNODES} \
+  --trusted-peers=${EL_BOOTNODES} \
+  --ipcpath=/opt/execution-data/reth.ipc
+Restart=always
+RestartSec=5
+KillSignal=SIGINT
+TimeoutStopSec=60
+User=reth
+Group=reth
+
+[Install]
+WantedBy=multi-user.target

@@ -1,0 +1,43 @@
+[Unit]
+Description=Lighthouse Beacon Node
+After=network.target reth.service
+Requires=reth.service
+
+[Service]
+Type=simple
+EnvironmentFile=/etc/default/lighthouse
+ExecStart=/usr/local/bin/lighthouse beacon_node \
+  --debug-level=info \
+  --datadir=/opt/consensus-data \
+  --testnet-dir=/opt/el-cl-genesis-data/custom_config_data \
+  --enr-address=${IP_ADDRESS} \
+  --enr-udp-port=10000 \
+  --enr-tcp-port=10000 \
+  --enr-quic-port=10001 \
+  --listen-address=0.0.0.0 \
+  --port=10000 \
+  --http \
+  --http-address=0.0.0.0 \
+  --http-port=5052 \
+  --http-allow-origin=* \
+  --execution-endpoints=http://127.0.0.1:8551 \
+  --jwt-secrets=/opt/el-cl-genesis-data/jwt/jwtsecret \
+  --suggested-fee-recipient=0x55A4255DcD8e41B588Fb54E11Afc8A34D791ab1d \
+  --metrics \
+  --metrics-address=0.0.0.0 \
+  --metrics-allow-origin=* \
+  --metrics-port=5054 \
+  --trusted-peers=${CL_TRUSTPEERS} \
+  --boot-nodes=${CL_BOOTNODES} \
+  --subscribe-all-subnets \
+  --import-all-attestations \
+  --checkpoint-sync-url=${CL_CHECKPOINTZ_URL} \
+  --always-prepare-payload \
+  --prepare-payload-lookahead=12000
+Restart=always
+RestartSec=5
+User=lighthouse
+Group=lighthouse
+
+[Install]
+WantedBy=multi-user.target
