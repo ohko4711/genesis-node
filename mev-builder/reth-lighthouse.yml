@@ -14,11 +14,11 @@ services:
       - --http.port=8545
       - --http.addr=0.0.0.0
       - --http.corsdomain=*
-      - --http.api=net,eth,web3,debug,trace
+      - --http.api=net,eth,web3,debug,trace,flashbots
       - --ws
       - --ws.addr=0.0.0.0
       - --ws.port=8546
-      - --ws.api=net,eth
+      - --ws.api=net,eth,flashbots
       - --ws.origins=*
       - --nat=extip:${IP_ADDRESS}
       - --authrpc.port=8551
