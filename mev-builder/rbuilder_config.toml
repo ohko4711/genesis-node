@@ -2,6 +2,7 @@
 # use: ./rbuilder run config.toml
 
 log_level = "info,rbuilder=debug"
+log_color = true
 redacted_telemetry_server_port = 6061
 redacted_telemetry_server_ip = "0.0.0.0"
 full_telemetry_server_port = 6060
@@ -17,7 +18,7 @@ cl_node_url = "http://localhost:5052"
 # cl_node_url = ["env:CL_NODE_URL"]
 jsonrpc_server_port = 8645
 jsonrpc_server_ip = "0.0.0.0"
-el_node_ipc_path = "./execution-data/reth.ipc"
+# el_node_ipc_path = "./execution-data/reth.ipc"
 extra_data = "pectra-devnet-1-builder"
 
 ignore_cancellable_orders = true
@@ -35,6 +36,10 @@ live_builders = ["mp-ordering", "mgp-ordering"]
 root_hash_use_sparse_trie = true
 root_hash_compare_sparse_trie = false
 
+[ipc_provider]
+ipc_path = "./execution-data/reth.ipc"
+mempool_server_url = "ws://localhost:8546"
+request_timeout_ms = 100
 
 # This can be used with test-relay
 [[relays]]
