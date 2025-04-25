@@ -71,9 +71,10 @@ services:
       - --subscribe-all-subnets
       - --import-all-attestations
       - --checkpoint-sync-url=${CL_CHECKPOINTZ_URL}
-      # ref: https://github.com/flashbots/rbuilde
+      # ref: https://github.com/flashbots/rbuilder
       - --always-prepare-payload
-      - --prepare-payload-lookahead=8000
+      # ref: https://github.com/flashbots/mev-boost-relay
+      - --prepare-payload-lookahead=12000
     volumes:
       - ./consensus-data:/consensus-data
       - ../el-cl-genesis-data:/el-cl-genesis-data
