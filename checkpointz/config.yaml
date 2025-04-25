@@ -17,7 +17,7 @@ checkpointz:
     # brand logo to display on the frontend (optional)
     brand_image_url:
     # brand to display on the frontend (optional)
-    brand_name: Brandname
+    brand_name: Endurance Pectra Devnet-1 Checkpointz
     # public url where frontend will be served from (optional)
     public_url: http://135.181.2.253:9781
 
