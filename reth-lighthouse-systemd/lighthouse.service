@@ -6,7 +6,7 @@ Requires=reth.service
 [Service]
 Type=simple
 EnvironmentFile=/etc/default/lighthouse
-ExecStart=/usr/local/bin/lighthouse beacon_node \
+ExecStart=/usr/local/bin/lighthouse bn \
   --debug-level=info \
   --datadir=/opt/consensus-data \
   --testnet-dir=/opt/el-cl-genesis-data/custom_config_data \
@@ -36,8 +36,6 @@ ExecStart=/usr/local/bin/lighthouse beacon_node \
   --prepare-payload-lookahead=12000
 Restart=always
 RestartSec=5
-User=lighthouse
-Group=lighthouse
 
 [Install]
 WantedBy=multi-user.target

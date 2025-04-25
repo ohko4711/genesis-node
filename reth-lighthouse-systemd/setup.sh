@@ -16,17 +16,17 @@ if [ -z "$IP" ]; then
 fi
 echo "✅ 公网 IP: $IP"
 
-echo "📦 下载并安装 reth..."
-curl -L "$RETH_URL" -o reth.tar.gz
-tar -xzf reth.tar.gz
-sudo install -m 755 reth /usr/local/bin/reth
-rm -rf reth
+# echo "📦 下载并安装 reth..."
+# curl -L "$RETH_URL" -o reth.tar.gz
+# tar -xzf reth.tar.gz
+# sudo install -m 755 reth /usr/local/bin/reth
+# rm -rf reth
 
-echo "📦 下载并安装 lighthouse..."
-curl -L "$LIGHTHOUSE_URL" -o lighthouse.tar.gz
-tar -xzf lighthouse.tar.gz
-sudo install -m 755 lighthouse /usr/local/bin/lighthouse
-rm -rf lighthouse
+# echo "📦 下载并安装 lighthouse..."
+# curl -L "$LIGHTHOUSE_URL" -o lighthouse.tar.gz
+# tar -xzf lighthouse.tar.gz
+# sudo install -m 755 lighthouse /usr/local/bin/lighthouse
+# rm -rf lighthouse
 
 echo "📁 创建 /etc/default 环境配置..."
 sudo install -Dm644 defaults/reth /etc/default/reth
