@@ -1,5 +1,3 @@
-version: "3.8"
-
 services:
   execution:
     image: nethermindeth/nethermind:release-1.31.9
@@ -60,12 +58,12 @@ services:
       - --metrics-address=0.0.0.0
       - --metrics-allow-origin=*
       - --metrics-port=5054
-      # for genesis node only have one node
-      - --target-peers=1 
       - --trusted-peers=${CL_TRUSTPEERS}
       - --boot-nodes=${CL_BOOTNODES}
       - --subscribe-all-subnets
       - --import-all-attestations
+      # ref:https://openfusionist.github.io/staking-docs/mev-docs/boost
+      - --builder=http://boost:18550
     volumes:
       - ./consensus-data:/consensus-data 
       - ../el-cl-genesis-data:/el-cl-genesis-data
@@ -100,6 +98,8 @@ services:
       - --metrics-allow-origin=*
       - --metrics-port=5064
       - --graffiti=Nethermind-Lighthouse
+      # ref:https://openfusionist.github.io/staking-docs/mev-docs/boost
+      - --builder-proposals
     volumes:
       - ../el-cl-genesis-data:/el-cl-genesis-data
       - ./validator_keys:/validator_keys
@@ -110,3 +110,17 @@ services:
     depends_on:
       - beacon
     restart: unless-stopped
+
+  boost:
+    image: flashbots/mev-boost:1.9
+    #bls key get from mev-boost-relay: `docker compose logs | grep 'Using BLS key'`
+    command: >
+      -addr 0.0.0.0:18550
+      -genesis-fork-version 0x10000001
+      -genesis-timestamp 1745420340
+      -relay-check
+      -relay http://0x8aaa802de39ce9ab3f0fe937681bff1ec325894a5471ead6dd91c2e7465cf26a3a9cd24478837fe24fac957e014aa3bb@20.195.2.236:9062
+    ports:
+      - "18550:18550"
+    stop_signal: SIGINT
+    stop_grace_period: 1m
