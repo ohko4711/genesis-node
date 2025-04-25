@@ -69,6 +69,10 @@ services:
       - --boot-nodes=${CL_BOOTNODES}
       - --subscribe-all-subnets
       - --import-all-attestations
+      - --checkpoint-sync-url=${CL_CHECKPOINTZ_URL}
+      # ref: https://github.com/flashbots/rbuilde
+      - --always-prepare-payload
+      - --prepare-payload-lookahead=8000
     volumes:
       - ./consensus-data:/consensus-data 
       - ../el-cl-genesis-data:/el-cl-genesis-data
