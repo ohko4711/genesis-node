@@ -27,15 +27,15 @@ services:
       - --metrics=0.0.0.0:9001
       - --bootnodes=${EL_BOOTNODES}
       - --trusted-peers=${EL_BOOTNODES}
+      - --ipcpath=/execution-data/reth.ipc
     volumes:
       - ./execution-data:/execution-data
       - ../el-cl-genesis-data:/el-cl-genesis-data
-      - /tmp/reth.ipc:/tmp/reth.ipc
     ports:
-      - "8545:8545" 
-      - "8546:8546" 
-      - "8551:8551" 
-      - "9001:9001" 
+      - "8545:8545"
+      - "8546:8546"
+      - "8551:8551"
+      - "9001:9001"
       - "30303:30303"
     restart: unless-stopped
     stop_signal: SIGINT
@@ -75,7 +75,7 @@ services:
       - --always-prepare-payload
       - --prepare-payload-lookahead=8000
     volumes:
-      - ./consensus-data:/consensus-data 
+      - ./consensus-data:/consensus-data
       - ../el-cl-genesis-data:/el-cl-genesis-data
     ports:
       - "10000:10000/tcp"
