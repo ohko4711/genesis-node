@@ -8,6 +8,8 @@ redacted_telemetry_server_ip = "0.0.0.0"
 full_telemetry_server_port = 6060
 full_telemetry_server_ip = "0.0.0.0"
 
+# for custom chain, use genesis file path
+chain = "../el-cl-genesis-data/custom_config_data/genesis.json"
 reth_datadir = "./execution-data"
 
 relay_secret_key = "0x51da11b45a7219cc61a3d9c5fd08c7eebd602a6a19a977f8d3771d5711a55123"
