@@ -7,11 +7,19 @@
 ## 目录结构
 
 ```
-.
 ├── README.md
+├── besu-lodestar
+├── checkpointz
 ├── dora
-├── ethereum-genesis-generator  // https://github.com/ethpandaops/ethereum-genesis-generator
-└── node // EL-CL-VN docker-compose
+├── ethereum-genesis-generator
+├── geth-prysm
+├── mev-boost-relay
+├── mev-builder
+├── nethermind-lighthouse
+├── node
+├── reth-lighthouse-systemd  // 为了测试rbuilder<->reth ipc 通信, 使用host systemd 启动reth,通过docker 启动挂载ipc volume也可以实现一样的效果
+└── scripts
+
 
 ```
 
@@ -36,7 +44,10 @@ install env ref:https://deposit-cli.ethstaker.cc/other_install_options.html#opti
 python3 -m ethstaker_deposit existing-mnemonic  --num_validators=64 --validator_start_index=0 --withdrawal_address "0x55A4255DcD8e41B588Fb54E11Afc8A34D791ab1d" --mnemonic "sleep moment list remain like wall lake industry canvas wonder ecology elite duck salad naive syrup frame brass utility club odor country obey pudding" --mnemonic_language=english  --folder=.. --keystore_password=0123456789.eth  --chain custom
 
 # second time for new validator join network
-python3 -m ethstaker_deposit existing-mnemonic  --num_validators=2 --validator_start_index=64 --withdrawal_address "0x55A4255DcD8e41B588Fb54E11Afc8A34D791ab1d" --mnemonic "sleep moment list remain like wall lake industry canvas wonder ecology elite duck salad naive syrup frame brass utility club odor country obey pudding" --mnemonic_language=english  --folder=../second-batch_validator_keys  --keystore_password=0123456789.eth  --chain custom
+python3 -m ethstaker_deposit existing-mnemonic  --num_validators=9000 --validator_start_index=0 --withdrawal_address "0x55A4255DcD8e41B588Fb54E11Afc8A34D791ab1d" --mnemonic "sleep moment list remain like wall lake industry canvas wonder ecology elite duck salad naive syrup frame brass utility club odor country obey pudding" --mnemonic_language=english  --folder=../pectra_devnet1_validator_keys  --keystore_password=0123456789.eth  --chain custom
+
+
+python3 -m ethstaker_deposit new-mnemonic --num_validators=1 --mnemonic_language=english --chain=custom  --folder=../validator_keys_4.22
 
 ```
 
@@ -60,7 +71,7 @@ cd node
 用于检查0x1 upgrade to 0x2 何时生效
 
 ```
-curl -X GET http://localhost:4000/eth/v1/beacon/states/head/validators/0xaa4545eae1ffe47cb4e48d1aa640e7994acdc9c976581c4a1bbf4ec34cbf2cad516e58e31e104a6bc26659cb6617674f
+curl -X GET http://localhost:4000/eth/v1/beacon/states/head/validators/0
 
 ```
 
