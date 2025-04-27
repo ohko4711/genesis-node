@@ -31,7 +31,6 @@ ExecStart=/usr/local/bin/reth node \
   --bootnodes=${EL_BOOTNODES} \
   --trusted-peers=${EL_BOOTNODES} \
   --ipcpath=/opt/execution-data/reth.ipc \
-  --engine.legacy-state-root \
   --engine.persistence-threshold=0 \
   --engine.memory-block-buffer-target=0
 Restart=always
