@@ -33,7 +33,7 @@ ExecStart=/usr/local/bin/lighthouse bn \
   --import-all-attestations \
   --checkpoint-sync-url=${CL_CHECKPOINTZ_URL} \
   --always-prepare-payload \
-  --prepare-payload-lookahead=12000 \
+  --prepare-payload-lookahead=8000 \
   --disable-deposit-contract-sync
 Restart=always
 RestartSec=5
