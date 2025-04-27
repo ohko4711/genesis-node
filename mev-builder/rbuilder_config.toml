@@ -1,7 +1,7 @@
 # ref: https://github.com/flashbots/rbuilder/blob/develop/docs/CONFIG.md
 # use: ./rbuilder run config.toml
 
-log_level = "info,rbuilder=debug"
+log_level = "info,providers=warn,rbuilder=debug"
 log_color = true
 redacted_telemetry_server_port = 6061
 redacted_telemetry_server_ip = "0.0.0.0"

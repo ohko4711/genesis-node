@@ -30,7 +30,8 @@ ExecStart=/usr/local/bin/reth node \
   --metrics=0.0.0.0:9001 \
   --bootnodes=${EL_BOOTNODES} \
   --trusted-peers=${EL_BOOTNODES} \
-  --ipcpath=/opt/execution-data/reth.ipc
+  --ipcpath=/opt/execution-data/reth.ipc \
+  --engine.legacy-state-root
 Restart=always
 RestartSec=5
 KillSignal=SIGINT
