@@ -100,6 +100,7 @@ services:
       - --graffiti=Nethermind-Lighthouse
       # ref:https://openfusionist.github.io/staking-docs/mev-docs/boost
       - --builder-proposals
+      - --prefer-builder-proposals
     volumes:
       - ../el-cl-genesis-data:/el-cl-genesis-data
       - ./validator_keys:/validator_keys
