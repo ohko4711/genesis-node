@@ -62,6 +62,7 @@ services:
       - --boot-nodes=${CL_BOOTNODES}
       - --subscribe-all-subnets
       - --import-all-attestations
+      - --checkpoint-sync-url=${CL_CHECKPOINTZ_URL}
       # ref:https://openfusionist.github.io/staking-docs/mev-docs/boost
       - --builder=http://boost:18550
     volumes:
