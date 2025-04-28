@@ -37,7 +37,7 @@ services:
       - --discovery.port=30303
       # solv: https://ethereum.stackexchange.com/questions/94412/valueerror-code-32000-message-only-replay-protected-eip-155-transac
       - --rpc.allow-unprotected-txs
-      # - --bootnodes=enr:-Iq4QJk4WqRkjsX5c2CXtOra6HnxN-BMXnWhmhEQO9Bn9iABTJGdjUOurM7Btj1ouKaFkvTRoju5vz2GPmVON2dffQKGAX53x8JigmlkgnY0gmlwhLKAlv6Jc2VjcDI1NmsxoQK6S-Cii_KmfFdUJL2TANL3ksaKUnNXvTCv1tLwXs0QgIN1ZHCCIyk
+      - --bootnodes=${EL_BOOTNODES}
 
     ports:
       - 8551:8551
@@ -82,7 +82,8 @@ services:
       - --disable-monitoring=false
       - --monitoring-host=0.0.0.0
       - --monitoring-port=8080
-      - --bootstrap-node=
+      - --bootstrap-node=${CL_BOOTNODES}
+      - --peer=${CL_STATICPEERS}
       - --subscribe-all-subnets=true
       - --p2p-static-id=true
     ports:
