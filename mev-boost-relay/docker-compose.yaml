@@ -89,6 +89,7 @@ services:
       --link-beaconchain http://135.181.2.253:9777/
       --link-data-api http://${IP_ADDRESS}:9062 /
       --link-etherscan https://explorer-endurance.fusionist.io/
+      --show-config-details 
     depends_on:
       - redis
       - memcached
