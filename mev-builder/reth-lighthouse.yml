@@ -1,6 +1,6 @@
 services:
   execution:
-    image: ghcr.io/paradigmxyz/reth:v1.3.12
+    image: ethpandaops/reth-rbuilder:develop
     command:
       - node
       - -vvv
@@ -28,9 +28,14 @@ services:
       - --bootnodes=${EL_BOOTNODES}
       - --trusted-peers=${EL_BOOTNODES}
       - --ipcpath=/execution-data/reth.ipc
+      - --rbuilder.config=/rbuilder.toml
+      - --engine.persistence-threshold=0
+      - --engine.memory-block-buffer-target=0
+      - --txpool.no-local-transactions-propagation
     volumes:
       - ./execution-data:/execution-data
       - ../el-cl-genesis-data:/el-cl-genesis-data
+      - ./rbuilder.toml:/rbuilder.toml
     ports:
       - "8545:8545"
       - "8546:8546"
