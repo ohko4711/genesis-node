@@ -83,3 +83,10 @@ curl -X GET http://localhost:4000/eth/v1/beacon/states/head/validators/0
 curl -s "http://localhost:4000/eth/v1/beacon/states/head/validators?status=active" \     
   -H "accept: application/json" | jq '.data[].validator.pubkey'
 ```
+
+## 部署pectra升级依赖的预编译合约
+
+```
+cd scripts
+node deployPectraRelatedContracts.js
+```
