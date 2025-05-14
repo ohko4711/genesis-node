@@ -20,7 +20,7 @@ def copy_files_to_subdirs(source_dir, num_subdirs):
     if not os.path.isdir(source_dir):
         print(f"Error: Source directory not found at {source_dir}")
         return
-
+devnet
     # Find all keystore files in the source directory
     file_pattern = os.path.join(source_dir, 'keystore-*.json')
     # Use os.path.basename to get just the filenames for copying logic

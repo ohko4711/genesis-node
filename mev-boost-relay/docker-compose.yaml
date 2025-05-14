@@ -18,7 +18,7 @@ services:
       POSTGRES_DB: postgres
 
   housekeeper:
-    image: flashbots/mev-boost-relay:0.30.0rc1
+    image: flashbots/mev-boost-relay:0.30.0
     restart: on-failure
     environment:
       GENESIS_FORK_VERSION: "0x10000001"
@@ -39,7 +39,7 @@ services:
       - db
 
   api:
-    image: flashbots/mev-boost-relay:0.30.0rc1
+    image: flashbots/mev-boost-relay:0.30.0
     restart: on-failure
     environment:
       GENESIS_FORK_VERSION: "0x10000001"
@@ -69,7 +69,7 @@ services:
       - db
 
   website:
-    image: flashbots/mev-boost-relay:0.30.0rc1
+    image: flashbots/mev-boost-relay:0.30.0
     restart: on-failure
     environment:
       GENESIS_FORK_VERSION: "0x10000001"
