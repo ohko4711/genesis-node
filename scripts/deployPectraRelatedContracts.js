@@ -11,12 +11,12 @@ const eip7002Config = require('./contracts/eip7002');
 const eip7251Config = require('./contracts/eip7251');
 
 // --- Configuration & Setup ---
-if (!process.env.PRIVATE_KEY || !process.env.DEVNET_RPC_URL) {
-    console.error("Error: Please set PRIVATE_KEY and DEVNET_RPC_URL in your .env file.");
+if (!process.env.PRIVATE_KEY || !process.env.MAINNET_RPC_URL) {
+    console.error("Error: Please set PRIVATE_KEY and MAINNET_RPC_URL in your .env file.");
     process.exit(1);
 }
 
-const provider = new ethers.providers.JsonRpcProvider(process.env.DEVNET_RPC_URL);
+const provider = new ethers.providers.JsonRpcProvider(process.env.MAINNET_RPC_URL);
 const privateKey = process.env.PRIVATE_KEY;
 const wallet = new ethers.Wallet(privateKey, provider);
 
@@ -87,7 +87,7 @@ async function sendEth(recipientAddress, amountToSend, eipName) {
 async function main() {
     console.log("Starting deployment process...");
     console.log(`Using deployer wallet: ${wallet.address}`);
-    console.log(`Connected to RPC: ${process.env.DEVNET_RPC_URL}`);
+    console.log(`Connected to RPC: ${process.env.MAINNET_RPC_URL}`);
 
     let allSucceeded = true;
 

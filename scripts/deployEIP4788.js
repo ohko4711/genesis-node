@@ -5,12 +5,12 @@ dotenv.config();
 
 // --- Configuration & Setup ---
 // Ensure PRIVATE_KEY and DEVNET_RPC_URL are set in your .env file
-if (!process.env.PRIVATE_KEY || !process.env.DEVNET_RPC_URL) {
+if (!process.env.PRIVATE_KEY || !process.env.MAINNET_RPC_URL) {
     console.error("Error: Please set PRIVATE_KEY and DEVNET_RPC_URL in your .env file.");
     process.exit(1);
 }
 
-const provider = new ethers.providers.JsonRpcProvider(process.env.DEVNET_RPC_URL);
+const provider = new ethers.providers.JsonRpcProvider(process.env.MAINNET_RPC_URL);
 const privateKey = process.env.PRIVATE_KEY;
 const wallet = new ethers.Wallet(privateKey, provider);
 
@@ -105,14 +105,15 @@ async function sendRawEip4788Tx() {
 
 // ref: https://github.com/ethereum/EIPs/blob/master/EIPS/eip-4788.md
 async function main() {
-    const ethSent = await sendEth();
+    // const ethSent = await sendEth();
 
-    // Only proceed if ETH was sent successfully
-    if (ethSent) {
-        await sendRawEip4788Tx();
-    } else {
-        console.log("\nSkipping raw transaction sending due to ETH transfer failure.");
-    }
+    // // Only proceed if ETH was sent successfully
+    // if (ethSent) {
+    //     await sendRawEip4788Tx();
+    // } else {
+    //     console.log("\nSkipping raw transaction sending due to ETH transfer failure.");
+    // }
+    sendRawEip4788Tx();
 }
 
 main();
