@@ -33,6 +33,7 @@ async function sendEth(recipientAddress, amountToSend, eipName) {
     console.log(`\n--- Funding ${eipName} Deployer ---`);
     console.log(`Attempting to send ${ethers.utils.formatEther(amountToSend)} ETH to ${recipientAddress} from ${wallet.address}`);
 
+    
     try {
         const currentBalance = await provider.getBalance(recipientAddress);
         console.log(`Current balance of ${recipientAddress}: ${ethers.utils.formatEther(currentBalance)} ETH`);
